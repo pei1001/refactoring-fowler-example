@@ -14,11 +14,11 @@ import java.util.*;
 
 public class Customer {
 	private String _name;
-	private List<Rental> _rentals;
+	 private Vector<Rental> _rentals;
 
 	public Customer(String name) {
 		_name = name;
-		_rentals = new ArrayList<Rental>();
+		_rentals = new Vector<>();
 
 	};
 
@@ -33,11 +33,11 @@ public class Customer {
 	public String statement() {
 		double totalAmount = 0;
 		int frequentRenterPoints = 0;
-		Iterator<Rental> rentals = _rentals.iterator();
+		Enumeration<Rental> rentals = _rentals.elements();
 		String result = "Rental Record for " + getName() + "\n";
-		while (rentals.hasNext()) {
+		while (rentals.hasMoreElements()) {
 			double thisAmount = 0;
-			Rental each = rentals.next();
+			Rental each = rentals.nextElement();
 			// determine amounts for each line
 			thisAmount = each.getCharge();			
 			frequentRenterPoints += each.getFrecuentRenterPoints();
@@ -52,4 +52,25 @@ public class Customer {
 				+ " frequent renter points";
 		return result;
 	}
+	
+	 public String htmlStatement() {
+		 double totalAmount = 0;
+		 int frequentRenterPoints = 0;
+		 Enumeration<Rental> rentals = _rentals.elements();
+		 String result = "<H1>Rental Record for " + getName() + "</H1>";
+		 while (rentals.hasMoreElements()) {
+			 double thisAmount = 0;
+			 Rental each = rentals.nextElement();
+			 // determine amounts for each line
+			 thisAmount = each.getCharge();
+			 frequentRenterPoints += each.getFrecuentRenterPoints();
+			 // show figures for this rental
+			 result += "<H2>" + each.getMovie().getTitle() + " " + String.valueOf(thisAmount) + "</H2>";
+			 totalAmount += thisAmount;
+		 }
+		 // add footer lines
+		 result += "<P>Amount owed is " + String.valueOf(totalAmount) + "</P>";
+		 result += "<P> You earned " + String.valueOf(frequentRenterPoints) + " frequent renter points </P>";
+		 return result;
+	 }
 }
