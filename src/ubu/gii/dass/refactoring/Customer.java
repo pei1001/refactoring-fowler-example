@@ -14,11 +14,11 @@ import java.util.*;
 
 public class Customer {
 	private String _name;
-	private List<Rental> _rentals;
+	private Vector<Rental> _rentals;
 
 	public Customer(String name) {
 		_name = name;
-		_rentals = new ArrayList<Rental>();
+		_rentals = new Vector<>();
 
 	};
 
@@ -31,45 +31,54 @@ public class Customer {
 	};
 
 	public String statement() {
-		double totalAmount = 0;
-		int frequentRenterPoints = 0;
-		Iterator<Rental> rentals = _rentals.iterator();
-		String result = "Rental Record for " + getName() + "\n";
-		while (rentals.hasNext()) {
-			double thisAmount = 0;
-			Rental each = rentals.next();
-			// determine amounts for each line
-			switch (each.getMovie().getPriceCode()) {
-			case Movie.REGULAR:
-				thisAmount += 2;
-				if (each.getDaysRented() > 2)
-					thisAmount += (each.getDaysRented() - 2) * 1.5;
-				break;
-			case Movie.NEW_RELEASE:
-				thisAmount += each.getDaysRented() * 3;
-				break;
-			case Movie.CHILDRENS:
-				thisAmount += 1.5;
-				if (each.getDaysRented() > 3)
-					thisAmount += (each.getDaysRented() - 3) * 1.5;
-				break;
-			}
-			
-			// add frequent renter points
-			frequentRenterPoints++;
-			// add bonus for a two day new release rental
-			if ((each.getMovie().getPriceCode() == Movie.NEW_RELEASE)
-					&& each.getDaysRented() > 1)
-				frequentRenterPoints++;
-			// show figures for this rental
-			result += "\t" + each.getMovie().getTitle() + "\t"
-					+ String.valueOf(thisAmount) + "\n";
-			totalAmount += thisAmount;
-		}
-		// add footer lines
-		result += "Amount owed is " + String.valueOf(totalAmount) + "\n";
-		result += "You earned " + String.valueOf(frequentRenterPoints)
-				+ " frequent renter points";
-		return result;
-	}
+        return generateStatement("text");
+    }
+
+    public String htmlStatement() {
+        return generateStatement("html");
+    }
+
+    private String generateStatement(String format) {
+        double totalAmount = 0;
+        int frequentRenterPoints = 0;
+        Enumeration<Rental> rentals = _rentals.elements();
+        String result = formatHeader(format);
+        
+        while (rentals.hasMoreElements()) {
+            Rental each = rentals.nextElement();
+            double thisAmount = each.getCharge();
+            frequentRenterPoints += each.getFrecuentRenterPoints(each.getDaysRented());
+            result += formatRentalLine(format, each, thisAmount);
+            totalAmount += thisAmount;
+        }
+
+        result += formatFooter(format, totalAmount, frequentRenterPoints);
+        return result;
+    }
+
+    private String formatHeader(String format) {
+        if (format.equals("html")) {
+            return "<H1>Rental Record for " + getName() + "</H1>";
+        } else {
+            return "Rental Record for " + getName() + "\n";
+        }
+    }
+
+    private String formatRentalLine(String format, Rental rental, double amount) {
+        if (format.equals("html")) {
+            return "<H2>" + rental.getMovie().getTitle() + " " + amount + "</H2>";
+        } else {
+            return "\t" + rental.getMovie().getTitle() + "\t" + amount + "\n";
+        }
+    }
+
+    private String formatFooter(String format, double totalAmount, int frequentRenterPoints) {
+        if (format.equals("html")) {
+            return "<P>Amount owed is " + totalAmount + "</P>"
+                 + "<P> You earned " + frequentRenterPoints + " frequent renter points </P>";
+        } else {
+            return "Amount owed is " + totalAmount + "\n"
+                 + "You earned " + frequentRenterPoints + " frequent renter points";
+        }
+    }
 }

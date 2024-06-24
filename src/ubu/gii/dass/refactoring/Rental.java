@@ -27,4 +27,14 @@ public class Rental {
 		return _movie;
 	}
 
+	public double getCharge() {
+		return _movie._priceCode.getCharge(this);
+	}
+
+
+
+	public int getFrecuentRenterPoints(int daysRented) {
+		return _movie.getFrecuentRenterPoints(this._daysRented);
+	}
+
 }
