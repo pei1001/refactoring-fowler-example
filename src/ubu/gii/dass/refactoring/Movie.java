@@ -11,7 +11,7 @@ package ubu.gii.dass.refactoring;
  * 
  */
 
-public class Movie implements MovieAbs {
+public class Movie {
 	public static final int CHILDRENS = 2;
 	public static final int REGULAR = 0;
 	public static final int NEW_RELEASE = 1;
@@ -24,18 +24,35 @@ public class Movie implements MovieAbs {
 		_priceCode = priceCode;
 	}
 
-	@Override
 	public int getPriceCode() {
 		return _priceCode;
 	}
 
-	@Override
 	public void setPriceCode(int arg) {
 		_priceCode = arg;
 	}
 
-	@Override
 	public String getTitle() {
 		return _title;
+	}
+
+	public double getCharge(Rental rental) {
+		double thisAmount = 0;
+		switch (rental.getMovie().getPriceCode()) {
+		case Movie.REGULAR:
+			thisAmount += 2;
+			if (rental.getDaysRented() > 2)
+				thisAmount += (rental.getDaysRented() - 2) * 1.5;
+			break;
+		case Movie.NEW_RELEASE:
+			thisAmount += rental.getDaysRented() * 3;
+			break;
+		case Movie.CHILDRENS:
+			thisAmount += 1.5;
+			if (rental.getDaysRented() > 3)
+				thisAmount += (rental.getDaysRented() - 3) * 1.5;
+			break;
+		}
+		return thisAmount;
 	}
 }
