@@ -35,7 +35,6 @@ public class Customer {
     }
 
     public String htmlStatement() {
-    	System.out.println(generateStatement("html"));
         return generateStatement("html");
     }
 

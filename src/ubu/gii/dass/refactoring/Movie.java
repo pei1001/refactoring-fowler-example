@@ -11,7 +11,7 @@ package ubu.gii.dass.refactoring;
  * 
  */
 
-public class Movie {
+public class Movie implements MovieAbs {
 	public static final int CHILDRENS = 2;
 	public static final int REGULAR = 0;
 	public static final int NEW_RELEASE = 1;
@@ -24,14 +24,17 @@ public class Movie {
 		_priceCode = priceCode;
 	}
 
+	@Override
 	public int getPriceCode() {
 		return _priceCode;
 	}
 
+	@Override
 	public void setPriceCode(int arg) {
 		_priceCode = arg;
 	}
 
+	@Override
 	public String getTitle() {
 		return _title;
 	}

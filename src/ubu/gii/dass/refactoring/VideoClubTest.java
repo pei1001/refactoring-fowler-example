@@ -18,7 +18,7 @@ import org.junit.Test;
  * 
  */
 public class VideoClubTest {
-	protected Movie m0, m11, m12, m2;
+	protected MovieAbs m0, m11, m12, m2;
 	protected Customer c1;
 	
 	@Before
