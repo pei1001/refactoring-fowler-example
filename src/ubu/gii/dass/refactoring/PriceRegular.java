@@ -17,5 +17,11 @@ public class PriceRegular implements Price{
 		}
 		return thisAmount;
 	}
+	
+	@Override
+	public int getFrecuentRenterPoints(Movie movie, int _daysRented) {
+		return 1;
+	}
+
 
 }

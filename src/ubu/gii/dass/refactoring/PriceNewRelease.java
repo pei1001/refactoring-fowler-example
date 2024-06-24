@@ -13,5 +13,16 @@ public class PriceNewRelease implements Price{
 		thisAmount += rental.getDaysRented() * 3;
 		return thisAmount;
 	}
+	
+	@Override
+	public int getFrecuentRenterPoints(Movie movie, int _daysRented) {
+		// add frequent renter points
+		int frequentRenterPoints=1;
+		// add bonus for a two day new release rental
+		if (_daysRented > 1)
+			frequentRenterPoints++;
+		return frequentRenterPoints;
+	}
+
 
 }
